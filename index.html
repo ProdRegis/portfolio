@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Regis He Charcoal Edition</title>
+<title>Regis He</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Regis He: finance and data science at NYU Stern. Web apps, product case studies, and prototypes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -515,7 +515,7 @@ function render(route) {
   else if (route === "resume") { view.innerHTML = resumeView(); loadResume(); }
   else view.innerHTML = caseView(PROJECTS.find(p => p.id === route));
   current = route; deckIdx = 0;
-  document.title = route === "home" ? "Regis He Charcoal Edition" : (route === "resume" ? "Resume, Regis He" : PROJECTS.find(p => p.id === route).title + ", Regis He");
+  document.title = route === "home" ? "Regis He" : (route === "resume" ? "Resume, Regis He" : PROJECTS.find(p => p.id === route).title + ", Regis He");
   setupReveal(); collectShift(); bindCursor(); bindPreviews();
 }
 function scrollToHash(h) {
