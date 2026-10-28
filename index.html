@@ -224,24 +224,28 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
 .veil{position:fixed;inset:0;background:var(--bg);z-index:80;opacity:0;pointer-events:none;transition:opacity .32s var(--ease)}
 .veil.on{opacity:1;pointer-events:auto}
 
-/* Intro: a small character writes the name in cursive, then the page settles in */
-.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--bg);padding-left:var(--gut);padding-right:var(--gut-r);transition:opacity .7s var(--ease);animation:failsafe .01s linear 7s forwards;cursor:pointer}
-.intro.out{opacity:0;pointer-events:none}
-.intro .stage{width:min(820px,100%);position:relative}
-.intro svg{width:100%;height:auto;overflow:visible;display:block}
-.intro .ink{fill:none;stroke:var(--fg);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.intro .skin{fill:var(--fg)}
-.intro .shirt{fill:var(--accent)}
-.intro .eye{fill:var(--bg)}
-.intro .limb{fill:none;stroke:var(--fg);stroke-width:2.2;stroke-linecap:round}
-.intro .pencil{stroke:var(--muted);stroke-width:2.8;stroke-linecap:round}
-.intro .irole{display:flex;justify-content:space-between;gap:16px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);opacity:0;transition:opacity .6s var(--ease)}
-.intro.done .irole{opacity:1}
-.intro .skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));padding:10px 4px;color:var(--muted)}
-.intro .skip:hover{color:var(--fg)}
+/* Intro: full screen. A small character hops across the name, each letter lights up, then the name glides into the hero */
+.intro{position:fixed;inset:0;z-index:100;display:grid;align-items:center;background:var(--bg);transition:background-color .75s var(--ease);animation:failsafe .01s linear 5.5s forwards;cursor:pointer}
+.intro .stage{max-width:var(--max);width:100%;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut-r);position:relative}
+@media (min-width:900px){.intro .stage{padding-left:max(48px,env(safe-area-inset-left,0px));padding-right:max(48px,env(safe-area-inset-right,0px))}}
+.intro .iname{position:relative;margin:0;will-change:transform}
+.intro .ch{display:inline-block;opacity:.16;transform-origin:50% 100%;transition:opacity .22s ease,transform .45s cubic-bezier(.3,1.7,.5,1)}
+.intro .ch.lit{opacity:1}
+.intro .ch.dip{transform:translateY(.06em) scale(1.04,.92);transition:transform .07s ease-out}
+.intro .irole{display:flex;justify-content:space-between;gap:16px;margin-top:clamp(20px,3vw,36px);padding-top:14px;border-top:1px solid var(--line);opacity:0;transition:opacity .5s var(--ease)}
+.intro.ready .irole{opacity:1}
+.intro.lift{background:transparent;pointer-events:none}
+.intro.lift .irole{opacity:0;transition-duration:.3s}
+.intro.lift .iname{transition:transform .8s var(--ease)}
+.intro.out{opacity:0;transition:opacity .45s var(--ease)}
+.hopper{position:fixed;left:0;top:0;z-index:101;pointer-events:none;transform-origin:50% 100%;will-change:transform}
+.hopper .skin{fill:var(--fg)}
+.hopper .shirt{fill:var(--accent)}
+.hopper .eye{fill:var(--bg)}
+.hopper .limb{fill:none;stroke:var(--fg);stroke-width:3;stroke-linecap:round}
 @keyframes failsafe{to{opacity:0;visibility:hidden}}
-.hero .name .ch{display:inline-block;transform-origin:0 100%;transition:transform .75s cubic-bezier(.3,1.5,.5,1)}
-html.intro-on .hero .name .ch{transform:translateY(125%) rotate(10deg)}
+.hero .name .ch{display:inline-block;transform-origin:50% 100%;transition:opacity .25s ease,transform .45s cubic-bezier(.3,1.7,.5,1)}
+html.intro-on .hero .name{visibility:hidden}
 html.intro-on .hero .enter{opacity:0;transform:translateY(14px)}
 .hero .enter{transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .hero .enter.d1{transition-delay:.08s}.hero .enter.d2{transition-delay:.18s}.hero .enter.d3{transition-delay:.28s}.hero .enter.d4{transition-delay:.38s}
@@ -259,28 +263,13 @@ html.intro-on .nav{opacity:0}
 <body>
 <div class="intro" id="intro" aria-hidden="true">
   <div class="stage">
-    <svg viewBox="-14 -40 376 180" id="introSvg">
-      <g id="ink"></g>
-      <g id="buddy" transform="translate(30 6)">
-        <g id="bud">
-          <line class="pencil" x1="0" y1="0" x2="6" y2="-8"/>
-          <line class="limb" x1="6" y1="-8" x2="12" y2="3"/>
-          <line class="limb" id="legL" x1="14" y1="15" x2="13" y2="25"/>
-          <line class="limb" id="legR" x1="20" y1="15" x2="21" y2="25"/>
-          <rect class="shirt" x="10" y="1" width="14" height="15" rx="5"/>
-          <line class="limb" id="armO" x1="22" y1="4" x2="27" y2="11"/>
-          <circle class="skin" cx="17" cy="-7" r="7.5"/>
-          <g id="eyes"><circle class="eye" cx="15" cy="-7.5" r="1.05"/><circle class="eye" cx="19.6" cy="-7.5" r="1.05"/></g>
-        </g>
-      </g>
-    </svg>
+    <p class="iname name"><span class="ln">Regis&nbsp;He<span class="dot">.</span></span></p>
     <div class="irole mono"><span>Finance and data science</span><span>NYU Stern, New York</span></div>
   </div>
-  <button class="skip mono" type="button" tabindex="-1">Skip</button>
 </div>
 <script>
 (function(){var d=document.documentElement;d.classList.add("intro-on");
-setTimeout(function(){d.classList.remove("intro-on");var i=document.getElementById("intro");if(i)i.remove();},7200);})();
+setTimeout(function(){d.classList.remove("intro-on");["intro"].forEach(function(id){var e=document.getElementById(id);if(e)e.remove();});var h=document.querySelector(".hopper");if(h)h.remove();},5600);})();
 </script>
 <div class="veil" id="veil" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true">View case</div>
@@ -399,7 +388,7 @@ function home() {
   <section class="hero wrap" id="top">
     <div class="hero-main">
       <div class="eyebrow mono enter d1"><span>Portfolio, 2026</span><span>NYU Stern</span><span>New York</span></div>
-      <h1 class="name" aria-label="Regis He"><span class="ln" aria-hidden="true">${[..."Regis He"].map((c, i) => `<span class="ch" style="transition-delay:${(0.05 + i * 0.055).toFixed(3)}s">${c === " " ? "&nbsp;" : c}</span>`).join("")}<span class="ch dot" style="transition-delay:.55s">.</span></span></h1>
+      <h1 class="name" aria-label="Regis He"><span class="ln" aria-hidden="true">${[..."Regis He"].map((c, i) => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("")}<span class="ch dot">.</span></span></h1>
       <p class="role enter d2">Finance and data science student at <em>NYU Stern</em>.</p>
       <a class="cta enter d3" href="#contact"><i></i>Get in touch</a>
       <figure class="hero-photo"><img src="img/photo.jpg" alt="Portrait of Regis He" width="560" height="700" decoding="async"></figure>
@@ -671,89 +660,105 @@ async function loadResume() {
   }
 }
 
-/* ---------- Intro: a little character writes the name ---------- */
-const HAND = ["M30.30,6.06 C30.81,6.57 32.83,7.07 33.33,9.09 C33.84,11.11 33.84,14.65 33.33,18.18 C32.83,21.72 31.31,26.77 30.30,30.30 C29.29,33.84 28.28,36.87 27.27,39.39 C26.26,41.92 25.76,42.93 24.24,45.45 C22.73,47.98 20.20,52.02 18.18,54.55 C16.16,57.07 14.14,59.09 12.12,60.61 C10.10,62.12 7.58,63.13 6.06,63.64 C4.55,64.14 4.04,64.14 3.03,63.64 C2.02,63.13 0.51,62.63 0.00,60.61 C-0.51,58.59 -0.51,55.56 0.00,51.52 C0.51,47.47 2.02,40.40 3.03,36.36 C4.04,32.32 5.05,29.80 6.06,27.27 C7.07,24.75 7.58,23.74 9.09,21.21 C10.61,18.69 13.13,14.65 15.15,12.12 C17.17,9.60 19.19,7.58 21.21,6.06 C23.23,4.55 24.75,4.04 27.27,3.03 C29.80,2.02 32.83,0.51 36.36,0.00 C39.90,-0.51 45.45,-0.51 48.48,0.00 C51.52,0.51 53.03,2.02 54.55,3.03 C56.06,4.04 56.57,4.55 57.58,6.06 C58.59,7.58 60.10,9.60 60.61,12.12 C61.11,14.65 61.11,18.69 60.61,21.21 C60.10,23.74 58.59,25.76 57.58,27.27 C56.57,28.79 56.06,29.29 54.55,30.30 C53.03,31.31 51.01,32.83 48.48,33.33 C45.96,33.84 42.42,33.84 39.39,33.33 C36.36,32.83 31.31,30.30 30.30,30.30 C29.29,30.30 32.32,31.82 33.33,33.33 C34.34,34.85 35.86,35.86 36.36,39.39 C36.87,42.93 35.86,51.01 36.36,54.55 C36.87,58.08 37.88,59.09 39.39,60.61 C40.91,62.12 43.43,63.64 45.45,63.64 C47.47,63.64 50.00,61.62 51.52,60.61 C53.03,59.60 53.03,59.60 54.55,57.58 C56.06,55.56 59.60,50.00 60.61,48.48", "M69.70,57.58 C70.71,57.07 74.24,55.56 75.76,54.55 C77.27,53.54 77.78,53.03 78.79,51.52 C79.80,50.00 81.31,47.47 81.82,45.45 C82.32,43.43 82.32,40.91 81.82,39.39 C81.31,37.88 79.80,36.87 78.79,36.36 C77.78,35.86 77.27,35.86 75.76,36.36 C74.24,36.87 71.21,37.88 69.70,39.39 C68.18,40.91 67.17,42.93 66.67,45.45 C66.16,47.98 66.16,52.02 66.67,54.55 C67.17,57.07 68.18,59.09 69.70,60.61 C71.21,62.12 73.74,63.13 75.76,63.64 C77.78,64.14 79.80,64.14 81.82,63.64 C83.84,63.13 86.36,61.62 87.88,60.61 C89.39,59.60 89.39,59.60 90.91,57.58 C92.42,55.56 95.96,50.00 96.97,48.48", "M124.24,45.45 C123.74,44.44 122.73,40.91 121.21,39.39 C119.70,37.88 117.17,36.87 115.15,36.36 C113.13,35.86 111.11,35.86 109.09,36.36 C107.07,36.87 104.55,38.38 103.03,39.39 C101.52,40.40 101.01,40.91 100.00,42.42 C98.99,43.94 97.47,46.46 96.97,48.48 C96.46,50.51 96.46,52.53 96.97,54.55 C97.47,56.57 98.48,59.09 100.00,60.61 C101.52,62.12 104.04,63.13 106.06,63.64 C108.08,64.14 110.10,64.14 112.12,63.64 C114.14,63.13 116.67,61.62 118.18,60.61 C119.70,59.60 120.71,58.08 121.21,57.58", "M127.27,36.36 C126.26,39.90 124.24,48.48 121.21,57.58 C118.18,66.67 111.62,84.34 109.09,90.91 C106.57,97.47 107.58,95.45 106.06,96.97 C104.55,98.48 101.52,100.00 100.00,100.00 C98.48,100.00 97.47,98.48 96.97,96.97 C96.46,95.45 96.46,93.43 96.97,90.91 C97.47,88.38 97.98,84.85 100.00,81.82 C102.02,78.79 106.06,75.25 109.09,72.73 C112.12,70.20 115.66,68.18 118.18,66.67 C120.71,65.15 121.72,65.15 124.24,63.64 C126.77,62.12 130.30,60.10 133.33,57.58 C136.36,55.05 140.91,50.00 142.42,48.48", "M151.52,21.21 C151.52,21.72 151.01,23.74 151.52,24.24 C152.02,24.75 154.04,24.75 154.55,24.24 C155.05,23.74 155.05,21.72 154.55,21.21 C154.04,20.71 152.02,21.21 151.52,21.21", "M142.42,48.48 C143.43,46.46 148.48,35.35 148.48,36.36 C148.48,37.37 143.43,50.51 142.42,54.55 C141.41,58.59 141.92,59.09 142.42,60.61 C142.93,62.12 144.44,63.13 145.45,63.64 C146.46,64.14 146.97,64.14 148.48,63.64 C150.00,63.13 153.03,61.62 154.55,60.61 C156.06,59.60 156.06,59.60 157.58,57.58 C159.09,55.56 161.62,51.52 163.64,48.48 C165.66,45.45 168.18,41.92 169.70,39.39 C171.21,36.87 172.22,33.33 172.73,33.33 C173.23,33.33 171.72,36.87 172.73,39.39 C173.74,41.92 177.27,45.96 178.79,48.48 C180.30,51.01 181.31,52.53 181.82,54.55 C182.32,56.57 182.83,59.09 181.82,60.61 C180.81,62.12 176.77,63.13 175.76,63.64", "M163.64,60.61 C164.65,61.11 166.67,63.13 169.70,63.64 C172.73,64.14 178.79,64.14 181.82,63.64 C184.85,63.13 186.36,61.62 187.88,60.61 C189.39,59.60 189.39,59.60 190.91,57.58 C192.42,55.56 195.96,50.00 196.97,48.48", "M244.67,21.21 C243.66,20.71 240.12,19.70 238.61,18.18 C237.09,16.67 236.08,13.64 235.58,12.12 C235.07,10.61 235.07,10.61 235.58,9.09 C236.08,7.58 237.09,4.55 238.61,3.03 C240.12,1.52 243.15,0.51 244.67,0.00 C246.18,-0.51 246.18,-0.51 247.70,0.00 C249.21,0.51 252.24,1.52 253.76,3.03 C255.27,4.55 256.28,7.07 256.79,9.09 C257.29,11.11 257.29,12.12 256.79,15.15 C256.28,18.18 255.27,22.22 253.76,27.27 C252.24,32.32 249.72,40.40 247.70,45.45 C245.68,50.51 243.66,54.55 241.64,57.58 C239.62,60.61 237.60,62.63 235.58,63.64 C233.56,64.65 231.03,64.14 229.52,63.64 C228.00,63.13 226.99,62.12 226.48,60.61 C225.98,59.09 226.48,55.56 226.48,54.55", "M244.67,36.36 C249.21,34.85 266.38,29.29 271.94,27.27 C277.49,25.25 275.47,25.76 278.00,24.24 C280.53,22.73 284.57,20.20 287.09,18.18 C289.62,16.16 291.64,14.14 293.15,12.12 C294.67,10.10 295.68,7.58 296.18,6.06 C296.69,4.55 296.69,4.04 296.18,3.03 C295.68,2.02 294.16,0.51 293.15,0.00 C292.14,-0.51 291.64,-1.01 290.12,0.00 C288.61,1.01 286.08,3.03 284.06,6.06 C282.04,9.09 280.02,13.13 278.00,18.18 C275.98,23.23 273.45,30.81 271.94,36.36 C270.42,41.92 269.41,47.47 268.91,51.52 C268.40,55.56 268.40,58.59 268.91,60.61 C269.41,62.63 270.93,63.13 271.94,63.64 C272.95,64.14 273.45,64.14 274.97,63.64 C276.48,63.13 279.52,61.62 281.03,60.61 C282.55,59.60 282.55,59.60 284.06,57.58 C285.58,55.56 289.11,50.00 290.12,48.48", "M299.21,57.58 C300.22,57.07 303.76,55.56 305.27,54.55 C306.79,53.54 307.29,53.03 308.30,51.52 C309.31,50.00 310.83,47.47 311.33,45.45 C311.84,43.43 311.84,40.91 311.33,39.39 C310.83,37.88 309.31,36.87 308.30,36.36 C307.29,35.86 306.79,35.86 305.27,36.36 C303.76,36.87 300.73,37.88 299.21,39.39 C297.70,40.91 296.69,42.93 296.18,45.45 C295.68,47.98 295.68,52.02 296.18,54.55 C296.69,57.07 297.70,59.09 299.21,60.61 C300.73,62.12 303.25,63.13 305.27,63.64 C307.29,64.14 309.31,64.14 311.33,63.64 C313.35,63.13 315.88,61.62 317.39,60.61 C318.91,59.60 318.91,59.60 320.42,57.58 C321.94,55.56 325.47,50.00 326.48,48.48"];
+/* ---------- Intro: full screen hop across the name, then the name glides into the hero (about 3 s) ---------- */
 function intro() {
-  const el = document.getElementById("intro"), root = document.documentElement;
-  if (!el) return;
-  const NS = "http://www.w3.org/2000/svg";
-  const ink = el.querySelector("#ink"), buddy = el.querySelector("#buddy"), bud = el.querySelector("#bud");
-  const legL = el.querySelector("#legL"), legR = el.querySelector("#legR"), armO = el.querySelector("#armO"), eyes = el.querySelector("#eyes");
-  let ended = false, raf = 0;
-  const finish = () => {
+  const root = document.documentElement, ov = document.getElementById("intro");
+  if (!ov) { root.classList.remove("intro-on"); return; }
+  const name = ov.querySelector(".iname"), ln = name.querySelector(".ln");
+  let ended = false, raf = 0, hop = null;
+  const cleanup = () => { root.classList.remove("intro-on"); ov.remove(); hop && hop.remove(); };
+  if (reduced) { ov.classList.add("out"); root.classList.remove("intro-on"); setTimeout(cleanup, 500); return; }
+  ln.innerHTML = [..."Regis He"].map(c => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("") + `<span class="ch dot">.</span>`;
+  const letters = [...ln.querySelectorAll(".ch")].filter(c => c.textContent.trim());
+
+  // glide the intro name onto the hero name, then reveal the page
+  const handoff = () => {
     if (ended) return; ended = true; cancelAnimationFrame(raf);
-    root.classList.remove("intro-on"); el.classList.add("out");
-    setTimeout(() => el.remove(), 750);
-  };
-  el.addEventListener("click", finish);
-  addEventListener("keydown", e => { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") finish(); }, { once: true });
-
-  const paths = HAND.map(d => { const p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ink"); ink.appendChild(p); return p; });
-  const lens = paths.map(p => p.getTotalLength());
-  bud.setAttribute("transform", `scale(${innerWidth < 640 ? 1.45 : 1})`);
-  const place = (x, y, hop = 0) => buddy.setAttribute("transform", `translate(${x.toFixed(2)} ${(y - hop).toFixed(2)})`);
-
-  if (reduced) {
-    const end = paths[paths.length - 1].getPointAtLength(lens[lens.length - 1]);
-    place(end.x + 6, end.y);
-    el.classList.add("done");
-    setTimeout(finish, 1500);
-    return;
-  }
-  paths.forEach((p, i) => { p.style.strokeDasharray = lens[i] + " " + lens[i]; p.style.strokeDashoffset = lens[i]; });
-
-  // timeline: short pause, then draw each stroke with a quick hop between strokes
-  const total = lens.reduce((a, b) => a + b, 0), WRITE = 1.5, HOP = 0.08, START = 0.25;
-  const plan = []; let t = START;
-  paths.forEach((p, i) => {
-    const d = WRITE * lens[i] / total;
-    plan.push({ kind: "draw", i, t0: t, t1: t + d }); t += d;
-    if (i < paths.length - 1) {
-      const a = p.getPointAtLength(lens[i]), b = paths[i + 1].getPointAtLength(0);
-      const hop = Math.hypot(b.x - a.x, b.y - a.y) > 8 ? HOP : 0.02;
-      plan.push({ kind: "move", a, b, t0: t, t1: t + hop }); t += hop;
-    }
-  });
-  const END = t, start0 = paths[0].getPointAtLength(0);
-  place(start0.x, start0.y);
-  let t0 = null;
-  const tick = now => {
-    if (t0 === null) t0 = now;
-    const s = (now - t0) / 1000;
-    // ink
-    for (const seg of plan) if (seg.kind === "draw") {
-      const k = Math.max(0, Math.min(1, (s - seg.t0) / (seg.t1 - seg.t0)));
-      paths[seg.i].style.strokeDashoffset = lens[seg.i] * (1 - k);
-    }
-    // buddy
-    const wig = Math.sin(s * 22);
-    legL.setAttribute("x2", (13 + wig * 2.2).toFixed(2)); legR.setAttribute("x2", (21 - wig * 2.2).toFixed(2));
-    eyes.style.transform = (s % 1.6 > 1.5) ? "scaleY(.15)" : "";
-    eyes.style.transformOrigin = "17px -7.5px";
-    if (s < START) { place(start0.x, start0.y, Math.abs(Math.sin(s * 9)) * 3); }
-    else if (s < END) {
-      const seg = plan.find(g => s >= g.t0 && s < g.t1) || plan[plan.length - 1];
-      if (seg.kind === "draw") {
-        const k = Math.max(0, Math.min(1, (s - seg.t0) / (seg.t1 - seg.t0)));
-        const pt = paths[seg.i].getPointAtLength(lens[seg.i] * k); place(pt.x, pt.y);
-      } else {
-        const k = (s - seg.t0) / (seg.t1 - seg.t0);
-        place(seg.a.x + (seg.b.x - seg.a.x) * k, seg.a.y + (seg.b.y - seg.a.y) * k, Math.sin(Math.PI * k) * 10);
-      }
-      armO.setAttribute("x2", "27"); armO.setAttribute("y2", "11");
+    letters.forEach(l => l.classList.add("lit"));
+    const target = current === "home" ? document.querySelector(".hero .name") : null;
+    const t = target && target.getBoundingClientRect();
+    if (hop) { hop.style.transition = "opacity .3s"; hop.style.opacity = 0; }
+    if (t && t.bottom > 0 && t.top < innerHeight) {
+      const r = name.getBoundingClientRect();
+      ov.classList.add("lift");
+      name.style.transform = `translate3d(${(t.left - r.left).toFixed(1)}px,${(t.top - r.top).toFixed(1)}px,0)`;
+      setTimeout(() => root.classList.remove("intro-on"), 560);
+      setTimeout(cleanup, 900);
     } else {
-      // little celebration: two hops and a wave
-      const c = s - END, last = paths[paths.length - 1].getPointAtLength(lens[lens.length - 1]);
-      el.classList.add("done");
-      const hop = c < 0.6 ? Math.abs(Math.sin(c * Math.PI / 0.3)) * 9 : 0;
-      place(last.x + Math.min(c, 0.3) * 30, last.y, hop);
-      armO.setAttribute("x2", (28 + Math.sin(c * 18) * 2).toFixed(2)); armO.setAttribute("y2", "-5");
-      if (c > 0.75) { finish(); return; }
+      ov.classList.add("out"); root.classList.remove("intro-on"); setTimeout(cleanup, 480);
     }
+  };
+  ov.addEventListener("click", handoff);
+  addEventListener("keydown", handoff, { once: true });
+
+  const run = () => {
+    ov.classList.add("ready");
+    const NS = "http://www.w3.org/2000/svg";
+    hop = document.createElementNS(NS, "svg");
+    hop.setAttribute("viewBox", "0 0 40 58"); hop.setAttribute("class", "hopper"); hop.setAttribute("aria-hidden", "true");
+    hop.innerHTML = `<line class="limb" x1="13" y1="28" x2="6" y2="37"/><line class="limb" id="hpArmR" x1="27" y1="28" x2="34" y2="37"/>
+      <line class="limb" x1="16" y1="41" x2="15" y2="55"/><line class="limb" x1="24" y1="41" x2="25" y2="55"/>
+      <rect class="shirt" x="11.5" y="22" width="17" height="20" rx="7"/>
+      <circle class="skin" cx="20" cy="12" r="10.5"/>
+      <circle class="eye" cx="17" cy="11.5" r="1.4"/><circle class="eye" cx="23.4" cy="11.5" r="1.4"/>`;
+    document.body.appendChild(hop);
+    const fs = parseFloat(getComputedStyle(name).fontSize);
+    const H = Math.max(34, fs * 0.5), W = H * 40 / 58;
+    hop.style.width = W + "px"; hop.style.height = H + "px";
+    const mark = document.createElement("i"); mark.style.cssText = "display:inline-block;width:0;height:0";
+    ln.appendChild(mark); const base = mark.getBoundingClientRect().top; mark.remove();
+    const cs = getComputedStyle(name), cv = document.createElement("canvas").getContext("2d");
+    cv.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    const pts = letters.map(l => {
+      const r = l.getBoundingClientRect(), m = cv.measureText(l.textContent);
+      return { x: r.left + r.width / 2, y: base - (m.actualBoundingBoxAscent || fs * 0.7) + fs * 0.02, el: l };
+    });
+    const start = { x: pts[0].x - fs * 1.1, y: base };
+    const path = [start, ...pts];
+    const durs = path.slice(1).map((p, i) => {
+      if (i === 0) return 0.3;
+      const prev = path[i].el, gap = prev && prev.nextSibling && prev.nextSibling.textContent.trim() === "";
+      return p.el.textContent === "." || gap ? 0.24 : 0.17;
+    });
+    const LEAD = 0.1, BOW = 0.22;
+    const t0s = []; let acc = LEAD; durs.forEach(d => { t0s.push(acc); acc += d; });
+    const LAND = acc;
+    const place = (x, y, sx, sy, rot) => { hop.style.transform = `translate(${(x - W / 2).toFixed(1)}px,${(y - H).toFixed(1)}px) rotate(${rot.toFixed(1)}deg) scale(${sx.toFixed(3)},${sy.toFixed(3)})`; };
+    const hit = new Set();
+    let t0 = null;
+    const tick = now => {
+      if (ended) return;
+      if (t0 === null) t0 = now;
+      const t = (now - t0) / 1000;
+      let x, y, sx = 1, sy = 1, rot = 0;
+      if (t < LEAD) { x = start.x; y = start.y; const k = t / LEAD; sx = 1 + 0.12 * k; sy = 1 - 0.16 * k; }
+      else if (t < LAND) {
+        let i = t0s.findIndex((s0, j) => t < s0 + durs[j]); if (i < 0) i = durs.length - 1;
+        const a = path[i], b = path[i + 1], k = (t - t0s[i]) / durs[i];
+        const lift = Math.max(fs * 0.3, Math.abs(b.y - a.y) * 0.6 + fs * 0.2);
+        x = a.x + (b.x - a.x) * k; y = a.y + (b.y - a.y) * k - 4 * lift * k * (1 - k);
+        const air = Math.sin(Math.PI * k);
+        sx = 1 - 0.07 * air; sy = 1 + 0.13 * air;
+        rot = Math.sign(b.x - a.x) * 5 * Math.sin(Math.PI * 2 * k);
+        if (k < 0.14) { const q = 1 - k / 0.14; sx += 0.16 * q; sy -= 0.22 * q; }
+      } else {
+        const last = path[path.length - 1], c = t - LAND;
+        x = last.x; y = last.y;
+        if (c < 0.12) { const q = Math.sin(Math.PI * c / 0.12); sx = 1 + 0.2 * q; sy = 1 - 0.24 * q; }
+        const arm = hop.querySelector("#hpArmR"); arm.setAttribute("x2", "36"); arm.setAttribute("y2", (20 - Math.sin(c * 30) * 3).toFixed(1));
+        if (c >= BOW) { place(x, y, sx, sy, rot); handoff(); return; }
+      }
+      path.forEach((p, j) => {
+        if (j === 0 || hit.has(j)) return;
+        if (t >= t0s[j - 1] + durs[j - 1]) { hit.add(j); p.el.classList.add("lit", "dip"); setTimeout(() => p.el.classList.remove("dip"), 110); }
+      });
+      place(x, y, sx, sy, rot);
+      raf = requestAnimationFrame(tick);
+    };
     raf = requestAnimationFrame(tick);
   };
-  const fontsReady = document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 500))]) : Promise.resolve();
-  fontsReady.then(() => { raf = requestAnimationFrame(tick); });
+  const fontsReady = document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 400))]) : Promise.resolve();
+  fontsReady.then(() => requestAnimationFrame(run));
 }
 
 go(location.hash, true);
