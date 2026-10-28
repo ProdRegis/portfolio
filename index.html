@@ -225,7 +225,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
 .veil.on{opacity:1;pointer-events:auto}
 
 /* Intro: full screen. A small character hops across the name, each letter lights up, then the name glides into the hero */
-.intro{position:fixed;inset:0;z-index:100;display:grid;align-items:center;background:var(--bg);transition:background-color .75s var(--ease);animation:failsafe .01s linear 5.5s forwards;cursor:pointer}
+.intro{position:fixed;inset:0;z-index:100;display:grid;align-items:center;background:var(--bg);transition:background-color .75s var(--ease);animation:failsafe .01s linear 6.5s forwards;cursor:pointer}
 .intro .stage{max-width:var(--max);width:100%;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut-r);position:relative}
 @media (min-width:900px){.intro .stage{padding-left:max(48px,env(safe-area-inset-left,0px));padding-right:max(48px,env(safe-area-inset-right,0px))}}
 .intro .iname{position:relative;margin:0;will-change:transform}
@@ -238,11 +238,21 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
 .intro.lift .irole{opacity:0;transition-duration:.3s}
 .intro.lift .iname{transition:transform .8s var(--ease)}
 .intro.out{opacity:0;transition:opacity .45s var(--ease)}
-.hopper{position:fixed;left:0;top:0;z-index:101;pointer-events:none;transform-origin:50% 100%;will-change:transform}
-.hopper .skin{fill:var(--fg)}
-.hopper .shirt{fill:var(--accent)}
-.hopper .eye{fill:var(--bg)}
-.hopper .limb{fill:none;stroke:var(--fg);stroke-width:3;stroke-linecap:round}
+.runner{position:fixed;inset:0;width:100%;height:100%;z-index:101;pointer-events:none;overflow:visible}
+.runner .skin{fill:#f0cfae}
+.runner .skin-s{fill:#d9b08e}
+.runner .hair{fill:#17181b}
+.runner .hood{fill:var(--accent)}
+.runner .hood-s{fill:#7d93a7}
+.runner .hood-d{fill:none;stroke:#6e8396;stroke-width:1.2;stroke-linecap:round}
+.runner .sleeve{fill:none;stroke:var(--accent);stroke-width:5.2;stroke-linecap:round}
+.runner .sleeve-b{fill:none;stroke:#7d93a7;stroke-width:5.2;stroke-linecap:round}
+.runner .pant{fill:none;stroke:#2c3138;stroke-width:6;stroke-linecap:round}
+.runner .pant-b{fill:none;stroke:#22262c;stroke-width:6;stroke-linecap:round}
+.runner .shoe{fill:#f5f5f3}
+.runner .sole{fill:#8b8c91}
+.runner .ink{fill:#17181b}
+.runner .line{fill:none;stroke:#17181b;stroke-width:1;stroke-linecap:round}
 @keyframes failsafe{to{opacity:0;visibility:hidden}}
 .hero .name .ch{display:inline-block;transform-origin:50% 100%;transition:opacity .25s ease,transform .45s cubic-bezier(.3,1.7,.5,1)}
 html.intro-on .hero .name{visibility:hidden}
@@ -269,7 +279,7 @@ html.intro-on .nav{opacity:0}
 </div>
 <script>
 (function(){var d=document.documentElement;d.classList.add("intro-on");
-setTimeout(function(){d.classList.remove("intro-on");["intro"].forEach(function(id){var e=document.getElementById(id);if(e)e.remove();});var h=document.querySelector(".hopper");if(h)h.remove();},5600);})();
+setTimeout(function(){d.classList.remove("intro-on");["intro"].forEach(function(id){var e=document.getElementById(id);if(e)e.remove();});var h=document.querySelector(".runner");if(h)h.remove();},6600);})();
 </script>
 <div class="veil" id="veil" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true">View case</div>
@@ -683,113 +693,169 @@ async function loadResume() {
   }
 }
 
-/* ---------- Intro: full screen hop across the name, then the name glides into the hero (about 3 s) ---------- */
+/* ---------- Intro: a little runner sprints across the name, lighting each letter, backflips off the last one ---------- */
+const RUNNER_SVG = `
+<g id="rnRoot">
+  <g id="armB" class="arm"><line class="sleeve-b" x1="0" y1="0" x2="0" y2="11"/><g class="fore"><line class="sleeve-b" x1="0" y1="0" x2="0" y2="9"/><circle class="skin-s" cx="0" cy="10.5" r="2.6"/></g></g>
+  <g id="legB" class="leg"><line class="pant-b" x1="0" y1="0" x2="0" y2="14"/><g class="shin"><line class="pant-b" x1="0" y1="0" x2="0" y2="13"/><g class="foot"><rect class="shoe" x="-3.2" y="12" width="10.5" height="5" rx="2.4" style="fill:#d9d9d6"/><rect class="sole" x="-3.2" y="15.6" width="10.5" height="1.6" rx=".8"/></g></g></g>
+  <g id="legF" class="leg"><line class="pant" x1="0" y1="0" x2="0" y2="14"/><g class="shin"><line class="pant" x1="0" y1="0" x2="0" y2="13"/><g class="foot"><rect class="shoe" x="-3.2" y="12" width="10.5" height="5" rx="2.4"/><rect class="sole" x="-3.2" y="15.6" width="10.5" height="1.6" rx=".8"/><line class="line" x1="0" y1="14" x2="4" y2="13.4" style="stroke:#c9c9c6"/></g></g></g>
+  <path class="hood" d="M-7 3 C-8.5 -6 -8.5 -16 -6 -24 C-3 -27.5 4 -27.5 7 -24 C8.6 -16 8.4 -6 7.4 3 C2.5 5 -2.5 5 -7 3 Z"/>
+  <path class="hood-s" d="M-7 3 C-8.5 -6 -8.5 -16 -6 -24 C-5 -25.4 -3.6 -26.3 -2 -26.8 C-4 -17 -4 -6 -2.6 4.2 C-4.2 4 -5.7 3.6 -7 3 Z"/>
+  <path class="hood-d" d="M-1 -6 L6.2 -6"/><path class="hood-d" d="M-7.4 0 C-2.5 1.6 2.5 1.6 7.6 0"/>
+  <g id="head">
+    <path class="hood-s" d="M-11 -2 C-12.5 -10 -8 -16 -2 -16.5 L-3 -4 C-4.5 1 -8 2 -11 -2 Z"/>
+    <circle class="skin" cx="0" cy="-7" r="9.6"/>
+    <path class="skin" d="M8.4 -8.5 C11.2 -7.6 11.4 -5.6 9 -4.6 Z"/>
+    <path class="hair" d="M-9.6 -6 C-11 -14.5 -4 -18.6 2.4 -17.6 C7.2 -16.8 10.2 -13.6 10.2 -10.6 C7 -11.6 4.2 -12 1.8 -11.2 C0.8 -9.4 -0.6 -8.2 -2.2 -7.8 C-3.6 -5 -5.4 -3.2 -7.2 -2.6 C-8.4 -3.4 -9.2 -4.6 -9.6 -6 Z"/>
+    <path class="hair" d="M2 -17.6 C4.5 -20.4 8 -19.6 9.2 -17.4 C7.2 -17.8 5.2 -17.4 3.6 -16.4 Z"/>
+    <circle class="skin-s" cx="-2.4" cy="-5.4" r="2.4"/>
+    <ellipse class="ink" id="eye" cx="5.4" cy="-7.6" rx="1.25" ry="1.55"/>
+    <path class="line" d="M5.2 -3 C6.6 -2.2 7.8 -2.4 8.6 -3.2"/>
+    <path class="line" d="M3.8 -10.4 L7 -10.8" style="stroke-width:1.1"/>
+  </g>
+  <g id="armF" class="arm"><line class="sleeve" x1="0" y1="0" x2="0" y2="11"/><g class="fore"><line class="sleeve" x1="0" y1="0" x2="0" y2="9"/><circle class="skin" cx="0" cy="10.5" r="2.6"/></g></g>
+</g>`;
 function intro() {
   const root = document.documentElement, ov = document.getElementById("intro");
   if (!ov) { root.classList.remove("intro-on"); return; }
   const name = ov.querySelector(".iname"), ln = name.querySelector(".ln");
-  let ended = false, raf = 0, hop = null;
-  const cleanup = () => { root.classList.remove("intro-on"); ov.remove(); hop && hop.remove(); };
+  let ended = false, raf = 0, svg = null;
+  const cleanup = () => { root.classList.remove("intro-on"); ov.remove(); svg && svg.remove(); };
   if (reduced) { ov.classList.add("out"); root.classList.remove("intro-on"); setTimeout(cleanup, 500); return; }
   ln.innerHTML = [..."Regis He"].map(c => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("");
   const letters = [...ln.querySelectorAll(".ch")].filter(c => c.textContent.trim());
 
-  // glide the intro name onto the hero name, then reveal the page
   const handoff = () => {
     if (ended) return; ended = true; cancelAnimationFrame(raf);
     letters.forEach(l => l.classList.add("lit"));
     const target = current === "home" ? document.querySelector(".hero .name") : null;
     const t = target && target.getBoundingClientRect();
-    if (hop) { hop.style.transition = "opacity .3s"; hop.style.opacity = 0; }
+    if (svg) { svg.style.transition = "opacity .3s"; svg.style.opacity = 0; }
     if (t && t.bottom > 0 && t.top < innerHeight) {
       const r = name.getBoundingClientRect();
       ov.classList.add("lift");
       name.style.transform = `translate3d(${(t.left - r.left).toFixed(1)}px,${(t.top - r.top).toFixed(1)}px,0)`;
-      setTimeout(() => root.classList.remove("intro-on"), 560);
-      setTimeout(cleanup, 900);
-    } else {
-      ov.classList.add("out"); root.classList.remove("intro-on"); setTimeout(cleanup, 480);
-    }
+      setTimeout(() => root.classList.remove("intro-on"), 520);
+      setTimeout(cleanup, 880);
+    } else { ov.classList.add("out"); root.classList.remove("intro-on"); setTimeout(cleanup, 480); }
   };
   ov.addEventListener("click", handoff);
   addEventListener("keydown", handoff, { once: true });
 
   const run = () => {
     ov.classList.add("ready");
-    const NS = "http://www.w3.org/2000/svg";
-    hop = document.createElementNS(NS, "svg");
-    hop.setAttribute("viewBox", "0 0 40 58"); hop.setAttribute("class", "hopper"); hop.setAttribute("aria-hidden", "true");
-    hop.innerHTML = `<line class="limb" x1="13" y1="28" x2="6" y2="37"/><line class="limb" id="hpArmR" x1="27" y1="28" x2="34" y2="37"/>
-      <line class="limb" x1="16" y1="41" x2="15" y2="55"/><line class="limb" x1="24" y1="41" x2="25" y2="55"/>
-      <rect class="shirt" x="11.5" y="22" width="17" height="20" rx="7"/>
-      <circle class="skin" cx="20" cy="12" r="10.5"/>
-      <circle class="eye" cx="17" cy="11.5" r="1.4"/><circle class="eye" cx="23.4" cy="11.5" r="1.4"/>`;
-    document.body.appendChild(hop);
+    svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "runner"); svg.setAttribute("aria-hidden", "true");
+    svg.innerHTML = RUNNER_SVG; document.body.appendChild(svg);
+    const $r = id => svg.querySelector("#" + id);
+    const rig = { root: $r("rnRoot"), head: $r("head"), eye: $r("eye"), armF: $r("armF"), armB: $r("armB"), legF: $r("legF"), legB: $r("legB") };
     const fs = parseFloat(getComputedStyle(name).fontSize);
-    const H = Math.max(34, fs * 0.5), W = H * 40 / 58;
-    hop.style.width = W + "px"; hop.style.height = H + "px";
+    const S = (fs * (innerWidth < 640 ? 0.8 : 0.56)) / 66;   // character about half the letter height, larger on phones
+    const GROUND = 31;                        // hip to sole, in rig units
+
+    // letter tops in screen space
     const mark = document.createElement("i"); mark.style.cssText = "display:inline-block;width:0;height:0";
     ln.appendChild(mark); const base = mark.getBoundingClientRect().top; mark.remove();
     const cs = getComputedStyle(name), cv = document.createElement("canvas").getContext("2d");
     cv.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-    const pts = letters.map(l => {
+    const boxes = letters.map(l => {
       const r = l.getBoundingClientRect(), m = cv.measureText(l.textContent);
-      return { x: r.left + r.width / 2, y: base - (m.actualBoundingBoxAscent || fs * 0.7) + fs * 0.02, el: l };
+      const asc = m.actualBoundingBoxAscent || fs * 0.7, lb = m.actualBoundingBoxLeft || 0, rb = m.actualBoundingBoxRight || r.width;
+      const gl = r.left + (r.width - (lb + rb)) / 2, gw = lb + rb;
+      return { el: l, l: gl + gw * 0.12, r: gl + gw * 0.88, top: base - asc + fs * 0.015 };
     });
-    const start = { x: pts[0].x - fs * 1.1, y: base };
-    const path = [start, ...pts];
-    const durs = path.slice(1).map((p, i) => {
-      if (i === 0) return 0.3;
-      const prev = path[i].el, gap = prev && prev.nextSibling && prev.nextSibling.textContent.trim() === "";
-      return p.el.textContent === "." || gap ? 0.24 : 0.17;
+
+    // plan: run in on the ground, leap onto R, run across each letter top with quick leaps between, backflip off the last e
+    const V = fs * 4.4, STRIDE = fs * 0.62;
+    const segs = []; let t = 0;
+    const addRun = (x0, x1, y, el) => { const d = (x1 - x0) / V; segs.push({ k: "run", x0, x1, y, t0: t, t1: t + d, el }); t += d; };
+    const addJump = (x0, y0, x1, y1, lift, d) => { segs.push({ k: "jump", x0, y0, x1, y1, lift, t0: t, t1: t + d }); t += d; };
+    const x0 = boxes[0].l - fs * 1.2;
+    addRun(x0, boxes[0].l - fs * 0.42, base);
+    addJump(boxes[0].l - fs * 0.42, base, boxes[0].l, boxes[0].top, fs * 0.28, 0.26);
+    boxes.forEach((b, i) => {
+      addRun(Math.max(b.l, segs[segs.length - 1].x1), b.r, b.top, b.el);
+      const n = boxes[i + 1];
+      if (n) {
+        const gap = n.l - b.r, up = Math.max(0, b.top - n.top);
+        addJump(b.r, b.top, n.l, n.top, fs * 0.1 + up * 0.7 + gap * 0.15, Math.max(0.11, Math.min(0.24, (gap + fs * 0.12) / V + up / (fs * 4))));
+      }
     });
-    const LEAD = 0.1, CROUCH = 0.09, FLIP = 0.5, SETTLE = 0.2;
-    const t0s = []; let acc = LEAD; durs.forEach(d => { t0s.push(acc); acc += d; });
-    const LAND = acc;
-    const place = (x, y, sx, sy, rot) => { hop.style.transform = `translate(${(x - W / 2).toFixed(1)}px,${(y - H).toFixed(1)}px) rotate(${rot.toFixed(1)}deg) scale(${sx.toFixed(3)},${sy.toFixed(3)})`; };
-    const hit = new Set();
-    let t0 = null;
+    const last = boxes[boxes.length - 1];
+    const CROUCH = 0.1, FLIP = 0.6, LAND = 0.14, WAVE = 0.3;
+    const tFlip = t, flipX0 = last.r, flipX1 = last.r + fs * 0.75;
+    const END = tFlip + CROUCH + FLIP + LAND + WAVE;
+
+    const rot = (el, a, tx = 0, ty = 0) => el.setAttribute("transform", `translate(${tx} ${ty}) rotate(${a.toFixed(1)})`);
+    const pose = (P) => {
+      rot(rig.legF, P.tf, 0, 0); rot(rig.legF.querySelector(".shin"), P.kf, 0, 14); rot(rig.legF.querySelector(".foot"), P.af || 0, 0, 0);
+      rot(rig.legB, P.tb, 0, 0); rot(rig.legB.querySelector(".shin"), P.kb, 0, 14); rot(rig.legB.querySelector(".foot"), P.ab || 0, 0, 0);
+      rot(rig.armF, P.sf, 1, -22); rot(rig.armF.querySelector(".fore"), P.ef, 0, 11);
+      rot(rig.armB, P.sb, -1, -22); rot(rig.armB.querySelector(".fore"), P.eb, 0, 11);
+      rig.head.setAttribute("transform", `translate(1 -26) rotate(${(P.hd || 0).toFixed(1)})`);
+    };
+    // run cycle: p advances with distance. Forward swing = negative angle (character faces +x).
+    const runPose = (p, air = 0) => {
+      // thigh drives forward and high, the knee folds as the leg recovers, then extends to plant
+      const leg = q => { const sn = Math.sin(q), cs = Math.cos(q);
+        return { t: -42 * sn - 10 * Math.max(0, cs) * Math.max(0, sn), k: 10 + 105 * Math.max(0, cs) * Math.max(0, -sn) * 1.9 + 45 * Math.max(0, sn) * Math.max(0, cs) }; };
+      const F = leg(p), B = leg(p + Math.PI);
+      return { tf: F.t - air * 12, kf: F.k + air * 20, tb: B.t + air * 6, kb: B.k + air * 25, af: -10 * Math.sin(p), ab: -10 * Math.sin(p + Math.PI),
+        sf: 46 * Math.sin(p), ef: -78 - 12 * Math.cos(p), sb: 46 * Math.sin(p + Math.PI), eb: -78 - 12 * Math.cos(p + Math.PI), hd: 3 };
+    };
+    const place = (x, ySole, lean, spin = 0, sx = 1, sy = 1) => {
+      // root origin is the hip; the soles sit GROUND units below it
+      rig.root.setAttribute("transform", `translate(${x.toFixed(1)} ${(ySole - GROUND * S * sy).toFixed(1)}) scale(${(S * sx).toFixed(4)} ${(S * sy).toFixed(4)}) rotate(${(lean + spin).toFixed(1)} 0 -10)`);
+    };
+    const lit = new Set();
+    const light = el => { if (!el || lit.has(el)) return; lit.add(el); el.classList.add("lit", "dip"); setTimeout(() => el.classList.remove("dip"), 120); };
+    let dist = 0, lastX = x0, t0 = null;
+    const ease = k => k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+
     const tick = now => {
       if (ended) return;
       if (t0 === null) t0 = now;
-      const t = (now - t0) / 1000;
-      let x, y, sx = 1, sy = 1, rot = 0;
-      if (t < LEAD) { x = start.x; y = start.y; const k = t / LEAD; sx = 1 + 0.12 * k; sy = 1 - 0.16 * k; }
-      else if (t < LAND) {
-        let i = t0s.findIndex((s0, j) => t < s0 + durs[j]); if (i < 0) i = durs.length - 1;
-        const a = path[i], b = path[i + 1], k = (t - t0s[i]) / durs[i];
-        const lift = Math.max(fs * 0.3, Math.abs(b.y - a.y) * 0.6 + fs * 0.2);
-        x = a.x + (b.x - a.x) * k; y = a.y + (b.y - a.y) * k - 4 * lift * k * (1 - k);
-        const air = Math.sin(Math.PI * k);
-        sx = 1 - 0.07 * air; sy = 1 + 0.13 * air;
-        rot = Math.sign(b.x - a.x) * 5 * Math.sin(Math.PI * 2 * k);
-        if (k < 0.14) { const q = 1 - k / 0.14; sx += 0.16 * q; sy -= 0.22 * q; }
+      const tt = (now - t0) / 1000;
+      if (tt < tFlip) {
+        const g = segs.find(s => tt < s.t1) || segs[segs.length - 1];
+        const k = Math.min(1, Math.max(0, (tt - g.t0) / (g.t1 - g.t0)));
+        let x, y, air = 0;
+        if (g.k === "run") { x = g.x0 + (g.x1 - g.x0) * k; y = g.y; light(g.el); }
+        else { x = g.x0 + (g.x1 - g.x0) * k; y = g.y0 + (g.y1 - g.y0) * k - 4 * g.lift * k * (1 - k); air = Math.sin(Math.PI * k); }
+        dist += Math.abs(x - lastX); lastX = x;
+        const p = (dist / STRIDE) * Math.PI * 2;
+        pose(runPose(p, air));
+        place(x, y - Math.abs(Math.sin(p)) * fs * 0.012, 9);
       } else {
-        // backflip off the last letter and land on the ground beside the name
-        const last = path[path.length - 1], c = t - LAND, dx = fs * 0.95;
-        const arm = hop.querySelector("#hpArmR");
-        if (c < CROUCH) { x = last.x; y = last.y; const q = Math.sin(Math.PI * 0.5 * c / CROUCH); sx = 1 + 0.18 * q; sy = 1 - 0.26 * q; }
-        else if (c < CROUCH + FLIP) {
-          const k = (c - CROUCH) / FLIP, e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-          const lift = fs * 0.62;
-          x = last.x + dx * k; y = last.y + (base - last.y) * k - 4 * lift * k * (1 - k);
-          hop.style.transformOrigin = "50% 55%"; rot = -360 * e; sx = 0.94; sy = 1.06;
-        } else {
-          hop.style.transformOrigin = "50% 100%";
-          x = last.x + dx; y = base;
-          const q2 = c - CROUCH - FLIP;
-          if (q2 < 0.12) { const q = Math.sin(Math.PI * q2 / 0.12); sx = 1 + 0.22 * q; sy = 1 - 0.28 * q; }
-          else { arm.setAttribute("x2", "36"); arm.setAttribute("y2", (20 - Math.sin(q2 * 30) * 3).toFixed(1)); }
-          if (q2 >= SETTLE) { place(x, y, sx, sy, 0); handoff(); return; }
-        }
+        const c = tt - tFlip;
+        if (c < CROUCH) {
+          const q = c / CROUCH;
+          pose({ tf: -30 * q, kf: 60 * q, tb: -10 * q, kb: 50 * q, sf: 40 * q, ef: -60, sb: 30 * q, eb: -60, hd: 0 });
+          place(flipX0, last.top, 9 - 4 * q, 0, 1 + 0.06 * q, 1 - 0.1 * q);
+        } else if (c < CROUCH + FLIP) {
+          const k = (c - CROUCH) / FLIP, e = ease(k);
+          const tuck = Math.min(1, Math.sin(Math.PI * Math.min(1, k * 1.1)) * 1.35);   // tight tuck through the middle of the flip
+          const x = flipX0 + (flipX1 - flipX0) * k;
+          const y = last.top + (base - last.top) * k - 4 * (fs * 0.62) * k * (1 - k);
+          // arms throw up and back at takeoff, then wrap the knees
+          const arm = k < 0.18 ? -150 * (k / 0.18) : -150 + 120 * tuck;
+          pose({ tf: -118 * tuck, kf: 150 * tuck, tb: -110 * tuck, kb: 148 * tuck, af: 15 * tuck, ab: 15 * tuck,
+                 sf: arm, ef: -30 - 75 * tuck, sb: arm + 10, eb: -30 - 75 * tuck, hd: -14 * tuck });
+          // backflip: the body rotates backward (counterclockwise while facing right), head going back over
+          place(x, y, 0, -360 * e);
+        } else if (c < CROUCH + FLIP + LAND) {
+          const q = (c - CROUCH - FLIP) / LAND, sq = Math.sin(Math.PI * q);
+          pose({ tf: -40 * sq, kf: 70 * sq, tb: -30 * sq, kb: 65 * sq, sf: -60 + 40 * q, ef: -30, sb: -50 + 40 * q, eb: -30, hd: 0 });
+          place(flipX1, base, 4 * sq, 0, 1 + 0.07 * sq, 1 - 0.12 * sq);
+        } else if (c < END - tFlip) {
+          const w = c - CROUCH - FLIP - LAND;
+          pose({ tf: -2, kf: 6, tb: 5, kb: 6, sf: -128, ef: -35 + 28 * Math.sin(w * 24), sb: 10, eb: -12, hd: -6 });
+          place(flipX1, base, 0);
+        } else { handoff(); return; }
       }
-      path.forEach((p, j) => {
-        if (j === 0 || hit.has(j)) return;
-        if (t >= t0s[j - 1] + durs[j - 1]) { hit.add(j); p.el.classList.add("lit", "dip"); setTimeout(() => p.el.classList.remove("dip"), 110); }
-      });
-      place(x, y, sx, sy, rot);
       raf = requestAnimationFrame(tick);
     };
+    pose(runPose(0)); place(x0, base, 9);
     raf = requestAnimationFrame(tick);
   };
   const fontsReady = document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 400))]) : Promise.resolve();
