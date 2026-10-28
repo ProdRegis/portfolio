@@ -278,7 +278,7 @@ setTimeout(function(){d.classList.remove("intro-on");["intro"].forEach(function(
   <div class="wrap">
     <a class="brand" href="#top" data-home>Regis He <span>/ Portfolio</span></a>
     <nav aria-label="Main"><ul>
-      <li><a href="#work" data-home>Work</a></li>
+      <li><a href="#work" data-home>Projects</a></li>
       <li><a href="#experience" data-home>Experience</a></li>
       <li><a href="#contact" data-home>Contact</a></li>
       <li><a href="#resume">Resume</a></li>
@@ -423,11 +423,11 @@ function home() {
       <a class="cta enter d3" href="#contact"><i></i>Get in touch</a>
       <figure class="hero-photo"><img src="img/photo.jpg" alt="Portrait of Regis He" width="560" height="700" decoding="async"></figure>
     </div>
-    <div class="hero-meta mono enter d4"><span>Most recently: Strategy and Operations Intern, Patlytics</span><span>Selected work below</span></div>
+    <div class="hero-meta mono enter d4"><span>Most recently: Strategy and Operations Intern, Patlytics</span><span>Projects below</span></div>
   </section>
 
   <section class="sec wrap" id="work" aria-labelledby="work-h">
-    <div class="sec-head"><h2 id="work-h" data-reveal>Selected work</h2><span class="mono">5 projects</span></div>
+    <div class="sec-head"><h2 id="work-h" data-reveal>Projects</h2><span class="mono">5 projects</span></div>
     <div class="work">${work}</div>
   </section>
 
@@ -482,7 +482,7 @@ function caseView(p) {
   return `
   <article>
     <div class="case-top wrap">
-      <a class="back mono" href="#work" data-home>${chev("M10 3 5 8l5 5").replace("<svg", '<svg width="12" height="12"')} All work</a>
+      <a class="back mono" href="#work" data-home>${chev("M10 3 5 8l5 5").replace("<svg", '<svg width="12" height="12"')} All projects</a>
       <div class="kicker mono" style="margin-top:28px"><b></b>${esc(p.kicker)}</div>
       <h1 class="case-title">${esc(p.title)}</h1>
       <p class="case-sub">${esc(p.blurb)}</p>
