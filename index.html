@@ -363,6 +363,36 @@ const PROJECTS = [
     ],
     deck: range(14, i => `img/p_uniqlo-deck-${String(i).padStart(2, "0")}.jpg`),
     screens: range(3, i => `img/p_uniqlo-screen-${i}.jpg`)
+  },
+  {
+    id: "veraitas", title: "VerAItas", kicker: "Fintech buildathon, Oct 2026",
+    blurb: "A beginner crypto trading app that shows what you could lose, what you really pay, and when you will sell, before you tap buy.",
+    a: "img/demo-vx-poster.jpg", video: "img/demo-vx.mp4", caption: "Recorded running the real front end on sample data. No real trades were made.",
+    facts: [["Event", "NYU Shipyard buildathon, Fintech Builder track"], ["Stack", "TypeScript, React, Vite, Tailwind, Hono"], ["Data", "True Markets API"], ["Built", "October 2026"]],
+    intro: "A trading app for people who have never traded. Before they buy, it answers three questions in plain dollars: how much could I lose, what am I really paying, and when will I sell.",
+    points: [
+      ["Swing Check", "Turns the last 30 days of crypto price swings into dollar risk on the amount you plan to put in"],
+      ["Receipt First", "Shows the hidden spread cost before every buy, refreshed from a live quote"],
+      ["Exit Ticket", "Keeps the buy locked until you pick a take-profit target, then sells automatically when the price gets there"],
+      ["Beginner Mode", "An AI agent explains price moves across 20 tokens in plain language"]
+    ],
+    links: [
+      { label: "Code on GitHub", url: "https://github.com/jialewang0528-gif/veraitas", solid: true }
+    ]
+  },
+  {
+    id: "cs2-integrity", title: "CS2 Integrity Watch", kicker: "IBM Z Datathon, Sep 2026",
+    blurb: "Flags pro Counter-Strike 2 matches where the betting market moved away from what the game itself said, for a person to investigate.",
+    a: "img/demo-cs2-poster.jpg", video: "img/demo-cs2.mp4", caption: "Recorded running the real app on its sample dataset. Part of the market feed is simulated, and the app labels it.",
+    facts: [["Team", "Team of 4"], ["Stack", "Python, pandas, scikit-learn, XGBoost"], ["Platform", "IBM LinuxONE"], ["Data", "Polymarket API, opencs2 dataset"]],
+    intro: "A match-fixing detector that puts live betting odds next to a game-state win probability model on one clock, then ranks matches where the market moved first. An alert is a lead, not a verdict.",
+    points: [
+      ["Data", "Assembled minute-by-minute betting odds for 665 pro CS2 series from 2 sources, with 100% agreement with final results"],
+      ["Detection", "Compares betting odds with in-game odds across 1,000+ maps and flags gaps that persist with no game event to explain them"],
+      ["Models", "Logistic regression for alerts, with XGBoost as a benchmark"],
+      ["Platform", "Runs on IBM LinuxONE with a lightweight web dashboard"]
+    ],
+    links: []
   }
 ];
 const EMAIL = "regis.he@stern.nyu.edu", PHONE = "+1 669-281-9387";
@@ -399,13 +429,6 @@ function home() {
   <section class="sec wrap" id="work" aria-labelledby="work-h">
     <div class="sec-head"><h2 id="work-h" data-reveal>Selected work</h2><span class="mono">5 projects</span></div>
     <div class="work">${work}</div>
-    <div class="more">
-      <p class="mono more-h">More projects</p>
-      <ul class="rows more-rows">
-        <li><span class="org">VerAItas</span><span class="what">Crypto risk tool that turns 30 days of price swings into dollar risk, shows hidden spread costs before every buy, and adds a Beginner Mode with an AI agent that explains moves across 20 tokens. TypeScript, React, Hono, True Markets API.</span><span class="when">Oct 2026</span></li>
-        <li><span class="org">CS2 Integrity Watch</span><span class="what">IBM Z Datathon, team of 4. A match-fixing detector on IBM LinuxONE that compares betting and in-game odds across 1,000+ maps, built on minute-by-minute odds for 665 pro series. Python, scikit-learn, XGBoost.</span><span class="when">Sep 2026</span></li>
-      </ul>
-    </div>
   </section>
 
   <section class="sec wrap" id="experience" aria-labelledby="exp-h">
