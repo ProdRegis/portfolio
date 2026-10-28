@@ -263,7 +263,7 @@ html.intro-on .nav{opacity:0}
 <body>
 <div class="intro" id="intro" aria-hidden="true">
   <div class="stage">
-    <p class="iname name"><span class="ln">Regis&nbsp;He<span class="dot">.</span></span></p>
+    <p class="iname name"><span class="ln">Regis&nbsp;He</span></p>
     <div class="irole mono"><span>Finance and data science</span><span>NYU Stern, New York</span></div>
   </div>
 </div>
@@ -418,7 +418,7 @@ function home() {
   <section class="hero wrap" id="top">
     <div class="hero-main">
       <div class="eyebrow mono enter d1"><span>Portfolio, 2026</span><span>NYU Stern</span><span>New York</span></div>
-      <h1 class="name" aria-label="Regis He"><span class="ln" aria-hidden="true">${[..."Regis He"].map((c, i) => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("")}<span class="ch dot">.</span></span></h1>
+      <h1 class="name" aria-label="Regis He"><span class="ln" aria-hidden="true">${[..."Regis He"].map((c, i) => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("")}</span></h1>
       <p class="role enter d2">Finance and data science student at <em>NYU Stern</em>.</p>
       <a class="cta enter d3" href="#contact"><i></i>Get in touch</a>
       <figure class="hero-photo"><img src="img/photo.jpg" alt="Portrait of Regis He" width="560" height="700" decoding="async"></figure>
@@ -691,7 +691,7 @@ function intro() {
   let ended = false, raf = 0, hop = null;
   const cleanup = () => { root.classList.remove("intro-on"); ov.remove(); hop && hop.remove(); };
   if (reduced) { ov.classList.add("out"); root.classList.remove("intro-on"); setTimeout(cleanup, 500); return; }
-  ln.innerHTML = [..."Regis He"].map(c => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("") + `<span class="ch dot">.</span>`;
+  ln.innerHTML = [..."Regis He"].map(c => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("");
   const letters = [...ln.querySelectorAll(".ch")].filter(c => c.textContent.trim());
 
   // glide the intro name onto the hero name, then reveal the page
@@ -743,7 +743,7 @@ function intro() {
       const prev = path[i].el, gap = prev && prev.nextSibling && prev.nextSibling.textContent.trim() === "";
       return p.el.textContent === "." || gap ? 0.24 : 0.17;
     });
-    const LEAD = 0.1, BOW = 0.22;
+    const LEAD = 0.1, CROUCH = 0.09, FLIP = 0.5, SETTLE = 0.2;
     const t0s = []; let acc = LEAD; durs.forEach(d => { t0s.push(acc); acc += d; });
     const LAND = acc;
     const place = (x, y, sx, sy, rot) => { hop.style.transform = `translate(${(x - W / 2).toFixed(1)}px,${(y - H).toFixed(1)}px) rotate(${rot.toFixed(1)}deg) scale(${sx.toFixed(3)},${sy.toFixed(3)})`; };
@@ -765,11 +765,23 @@ function intro() {
         rot = Math.sign(b.x - a.x) * 5 * Math.sin(Math.PI * 2 * k);
         if (k < 0.14) { const q = 1 - k / 0.14; sx += 0.16 * q; sy -= 0.22 * q; }
       } else {
-        const last = path[path.length - 1], c = t - LAND;
-        x = last.x; y = last.y;
-        if (c < 0.12) { const q = Math.sin(Math.PI * c / 0.12); sx = 1 + 0.2 * q; sy = 1 - 0.24 * q; }
-        const arm = hop.querySelector("#hpArmR"); arm.setAttribute("x2", "36"); arm.setAttribute("y2", (20 - Math.sin(c * 30) * 3).toFixed(1));
-        if (c >= BOW) { place(x, y, sx, sy, rot); handoff(); return; }
+        // backflip off the last letter and land on the ground beside the name
+        const last = path[path.length - 1], c = t - LAND, dx = fs * 0.95;
+        const arm = hop.querySelector("#hpArmR");
+        if (c < CROUCH) { x = last.x; y = last.y; const q = Math.sin(Math.PI * 0.5 * c / CROUCH); sx = 1 + 0.18 * q; sy = 1 - 0.26 * q; }
+        else if (c < CROUCH + FLIP) {
+          const k = (c - CROUCH) / FLIP, e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+          const lift = fs * 0.62;
+          x = last.x + dx * k; y = last.y + (base - last.y) * k - 4 * lift * k * (1 - k);
+          hop.style.transformOrigin = "50% 55%"; rot = -360 * e; sx = 0.94; sy = 1.06;
+        } else {
+          hop.style.transformOrigin = "50% 100%";
+          x = last.x + dx; y = base;
+          const q2 = c - CROUCH - FLIP;
+          if (q2 < 0.12) { const q = Math.sin(Math.PI * q2 / 0.12); sx = 1 + 0.22 * q; sy = 1 - 0.28 * q; }
+          else { arm.setAttribute("x2", "36"); arm.setAttribute("y2", (20 - Math.sin(q2 * 30) * 3).toFixed(1)); }
+          if (q2 >= SETTLE) { place(x, y, sx, sy, 0); handoff(); return; }
+        }
       }
       path.forEach((p, j) => {
         if (j === 0 || hit.has(j)) return;
