@@ -17,7 +17,7 @@
   --deep:#0c131a;        /* raised surface */
   --tide:#13202c;        /* back wave */
   --swell:#1c3242;       /* front wave, crest band */
-  --foam:#9fb4c7;        /* accent, same steel blue as the classic site */
+  --foam:#9fb4c7;        /* accent, soft steel blue */
   --accent:var(--foam);  /* the runner character reads this name */
   --sun:#e9a46a;         /* low sun glow, used once */
   --fg:#f2f4f5;
@@ -69,9 +69,12 @@ main{position:relative;z-index:1}
 .snd[aria-pressed="true"] .eq i:nth-child(3){animation-delay:-.7s}
 .snd[aria-pressed="true"] .eq i:nth-child(4){animation-delay:-.2s}
 @keyframes eq{0%,100%{height:3px}50%{height:12px}}
-.classic{display:inline-flex;gap:8px;align-items:center}
-.classic:hover{color:var(--fg)}
-@media (max-width:860px){.bar .classic{display:none}}
+.links{display:flex;flex-wrap:wrap;gap:10px}
+.links .pill{padding:14px 18px}
+.pw{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:16px}
+.pw code{font:500 12.5px/1 var(--mono);color:var(--fg);padding:8px 10px;border-radius:8px;background:rgba(6,8,11,.5);border:1px solid rgba(255,255,255,.12)}
+.pw button{font:500 11px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:8px 0}
+.pw button:hover{color:var(--fg)}
 @media (max-width:700px){
   .bar .wrap{grid-template-columns:1fr auto}
   .tabs{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));justify-content:space-between}
@@ -354,7 +357,6 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
     </nav>
     <div class="right">
       <button class="snd mono" id="snd" type="button" aria-pressed="false" aria-label="Sound"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="sndLabel">Sound off</span></button>
-      <a class="mono classic" href="classic.html">Classic site</a>
     </div>
   </div>
 </header>
@@ -438,8 +440,7 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
               <li><button type="button" data-copy="+1 669-281-9387">Copy phone</button></li></ul></div>
             <div><h4>Elsewhere</h4><ul>
               <li><a href="https://github.com/ProdRegis" target="_blank" rel="noopener">GitHub</a></li>
-              <li><a href="classic.html#resume">Resume</a></li>
-              <li><a href="classic.html">Classic site</a></li></ul></div>
+              <li><a href="img/resume.pdf" target="_blank" rel="noopener">Resume</a></li></ul></div>
           </nav>
         </div>
         <div class="slab-mid">
@@ -449,7 +450,7 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
             <a href="https://github.com/ProdRegis" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.34.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.83-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg></a>
             <button type="button" data-copy="regis.he@stern.nyu.edu" aria-label="Copy email"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="2"/><path d="m2 4 6 5 6-5"/></svg></button>
             <button type="button" data-copy="+1 669-281-9387" aria-label="Copy phone"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5.5 1.8 3.7 2c-.9.1-1.6.9-1.5 1.8.6 5.3 4.7 9.4 10 10 .9.1 1.7-.6 1.8-1.5l.2-1.8-3-1.4-1.6 1.5c-1.8-.8-3.4-2.4-4.2-4.2L7 4.8 5.5 1.8Z"/></svg></button>
-            <a href="classic.html#resume" aria-label="Resume"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13M6 8.5h5M6 11h5"/></svg></a>
+            <a href="img/resume.pdf" target="_blank" rel="noopener" aria-label="Resume"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13M6 8.5h5M6 11h5"/></svg></a>
           </span>
         </div>
         <div class="wordmark" aria-hidden="true">
@@ -480,6 +481,14 @@ const PROJECTS = [
   { id: "veraitas", title: "VerAItas", kicker: "Fintech buildathon, Oct 2026", blurb: "A beginner crypto trading app that shows what you could lose, what you really pay, and when you will sell, before you tap buy.", v: "img/demo-vx", cap: "Real front end on sample data. No real trades." },
   { id: "cs2-integrity", title: "CS2 Integrity Watch", kicker: "IBM Z Datathon, Sep 2026", blurb: "Flags pro Counter-Strike 2 matches where the betting market moved away from what the game itself said, for a person to investigate.", v: "img/demo-cs2", cap: "Real app on its sample dataset. Part of the feed is simulated." }
 ];
+const LINKS = {
+  "stock-analyzer": [{ label: "View website", url: "https://stock-analyzer-lake-nu.vercel.app/" }, { label: "Code on GitHub", url: "https://github.com/ProdRegis/Stock-Analyzer" }],
+  "wechat": [{ label: "Reply thread prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2-2&starting-point-node-id=2%3A2&scaling=scale-down" }, { label: "Reaction prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2-216&starting-point-node-id=2%3A216&scaling=scale-down" }, { label: "Group reaction prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2014-259&starting-point-node-id=2014%3A259&scaling=scale-down" }, { label: "Open in Figma", url: "https://www.figma.com/design/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=0-1" }],
+  "uniqlo": [{ label: "Try the prototype", url: "https://www.figma.com/proto/RjOQTP1kzervocuJKztFLV/Uniqlo-Case-Comp?node-id=107-2&starting-point-node-id=107%3A2&scaling=scale-down" }, { label: "Open in Figma", url: "https://www.figma.com/design/RjOQTP1kzervocuJKztFLV/Uniqlo-Case-Comp?node-id=0-1" }],
+  "veraitas": [{ label: "Code on GitHub", url: "https://github.com/jialewang0528-gif/veraitas" }],
+  "cs2-integrity": []
+};
+const PASSWORDS = { "stock-analyzer": "cryingbrickwall-99" };
 const STOPS = [
   { at: .03, yr: "2022", org: "Touch 3 Volleyball", what: "High Performance Coach", when: "2022 to 2025" },
   { at: .27, yr: "2025", org: "NYU Product Management Club", what: "BrainStation Case Competition, top three finisher", when: "2025" },
@@ -622,7 +631,7 @@ setTimeout(() => $("#enterSound").focus({ preventScroll: true }), 50);
 /* ================= Hero ================= */
 function revealHero() { requestAnimationFrame(() => root.classList.remove("pre")); }
 
-/* ================= Intro runner (same character as the classic site) ================= */
+/* ================= Intro runner ================= */
 const RUNNER_SVG = `
 <g id="rnRoot">
   <g id="armB" class="arm"><line class="sleeve-b" x1="0" y1="0" x2="0" y2="11"/><g class="fore"><line class="sleeve-b" x1="0" y1="0" x2="0" y2="9"/><circle class="skin-s" cx="0" cy="10.5" r="2.6"/></g></g>
@@ -872,7 +881,8 @@ const panels = PROJECTS.map((p, i) => {
       <div class="count mono"><b></b><span>${pad2(i + 1)} / ${pad2(PROJECTS.length)}</span><span>${p.kicker}</span></div>
       <h3>${p.title}</h3>
       <p>${p.blurb}</p>
-      <a class="pill" href="classic.html#${p.id}" data-hover>Open case study</a>
+      <div class="links">${(LINKS[p.id] || []).map((l, k) => `<a class="pill${k ? "" : " solid"}" href="${l.url}" target="_blank" rel="noopener" data-hover>${l.label}</a>`).join("")}</div>
+      ${PASSWORDS[p.id] ? `<div class="pw mono"><span>Website password</span><code>${PASSWORDS[p.id]}</code><button type="button" data-copy="${PASSWORDS[p.id]}">Copy</button></div>` : ""}
     </div>
     <div class="screen-wrap">
       <div class="screen"><img src="${p.v}-poster.jpg" alt="" loading="lazy"><video muted loop playsinline preload="none" poster="${p.v}-poster.jpg" aria-label="${p.title} demo"></video></div>
@@ -1037,7 +1047,7 @@ document.addEventListener("click", e => {
     const label = c.textContent;
     const icon = c.querySelector("svg");
     const ok = () => { SFX.copy(); if (icon) { c.style.color = "#6ee7a8"; setTimeout(() => { c.style.color = ""; }, 1500); } else { c.textContent = "Copied"; setTimeout(() => { c.textContent = label; }, 1500); } };
-    const fallback = () => { const v = c.parentElement.querySelector(".val, span"); if (v) { const r = document.createRange(); r.selectNodeContents(v); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } SFX.click(); };
+    const fallback = () => { const v = c.parentElement.querySelector(".val, code, span"); if (v) { const r = document.createRange(); r.selectNodeContents(v); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } SFX.click(); };
     try { navigator.clipboard.writeText(c.dataset.copy).then(ok, fallback); } catch (_) { fallback(); }
     return;
   }
