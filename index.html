@@ -167,7 +167,7 @@ html.pre .photo .card{opacity:0;translate:0 30px}
 
 /* Projects */
 #projects .wrap{padding-block:100px 48px}
-.ptabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:clamp(24px,3.4vw,44px)}
+.ptabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:clamp(24px,3.4vw,44px)}
 .ptab{text-align:left;display:grid;gap:8px;padding-top:12px;border-top:2px solid var(--line-strong);color:var(--muted);transition:color .4s var(--ease),border-color .4s var(--ease);min-width:0}
 .ptab b{font:500 11px/1 var(--mono);letter-spacing:.09em}
 .ptab span{font:500 clamp(.95rem,1.3vw,1.15rem)/1.15 var(--display);font-stretch:104%}
@@ -311,6 +311,25 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
 .wm-shine text{font:800 200px/1 Arial,"Helvetica Neue",Helvetica,sans-serif;letter-spacing:-6px}
 @media (max-width:900px){.slab-top{grid-template-columns:minmax(0,1fr)}.cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:700px){.contact .wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}}
+
+/* Deck viewer */
+.deck-btn{cursor:pointer}
+.deck{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:calc(20px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(4,6,9,.62);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+.deck[hidden]{display:none}
+.deck-card{width:min(1180px,100%);max-height:100%;display:grid;gap:12px;padding:12px;border-radius:26px;background:linear-gradient(140deg,rgba(255,255,255,.14),rgba(255,255,255,.04) 42%,rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 30px 90px rgba(0,0,0,.5)}
+.deck-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 6px}
+.deck-top b{font:500 15px/1.2 var(--display);font-stretch:106%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deck-img{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:16px;overflow:hidden;background:#0c0f13}
+.deck-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .2s}
+.deck-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 4px}
+.deck-bar button,.deck-x{display:inline-grid;place-items:center;min-width:42px;height:42px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--fg);font:500 11px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;transition:background .3s,border-color .3s}
+.deck-bar button:hover,.deck-x:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35)}
+.deck-thumbs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 4px 4px}
+.deck-thumbs::-webkit-scrollbar{display:none}
+.deck-thumbs button{flex:0 0 96px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.14);opacity:.5;transition:opacity .3s,border-color .3s;padding:0}
+.deck-thumbs button[aria-current="true"],.deck-thumbs button:hover{opacity:1;border-color:rgba(255,255,255,.6)}
+.deck-thumbs img{width:100%;height:100%;object-fit:cover}
+@media (max-width:600px){.deck-thumbs{display:none}}
 </style>
 
 </head>
@@ -381,7 +400,7 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
 
   <section class="view" id="projects" aria-labelledby="proj-h">
     <div class="wrap">
-      <div class="vhead"><h2 id="proj-h">Projects</h2><span class="mono">5 projects, pick one</span></div>
+      <div class="vhead"><h2 id="proj-h">Projects</h2><span class="mono">6 projects, pick one</span></div>
       <div class="ptabs" id="ptabs" role="tablist" aria-label="Projects"></div>
       <div class="pstage" id="pstage"></div>
     </div>
@@ -425,11 +444,12 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
           </div>
           <nav class="cols" aria-label="Site map">
             <div><h4>Projects</h4><ul>
-              <li><a href="#projects" data-view="projects" data-proj="0">Risk Analyzer</a></li>
-              <li><a href="#projects" data-view="projects" data-proj="1">WeChat</a></li>
-              <li><a href="#projects" data-view="projects" data-proj="2">Uniqlo</a></li>
-              <li><a href="#projects" data-view="projects" data-proj="3">VerAItas</a></li>
-              <li><a href="#projects" data-view="projects" data-proj="4">CS2 Watch</a></li></ul></div>
+              <li><a href="#projects" data-view="projects" data-proj="0">Pilot</a></li>
+              <li><a href="#projects" data-view="projects" data-proj="1">Risk Analyzer</a></li>
+              <li><a href="#projects" data-view="projects" data-proj="2">WeChat</a></li>
+              <li><a href="#projects" data-view="projects" data-proj="3">Uniqlo</a></li>
+              <li><a href="#projects" data-view="projects" data-proj="4">VerAItas</a></li>
+              <li><a href="#projects" data-view="projects" data-proj="5">CS2 Watch</a></li></ul></div>
             <div><h4>Experience</h4><ul>
               <li><a href="#experience" data-view="experience" data-stop="4">Patlytics</a></li>
               <li><a href="#experience" data-view="experience" data-stop="3">Live Viewing</a></li>
@@ -466,6 +486,15 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
   </section>
 </main>
 
+<div class="deck" id="deck" role="dialog" aria-modal="true" aria-labelledby="deckTitle" hidden>
+  <div class="deck-card">
+    <div class="deck-top"><b id="deckTitle">Deck</b><button type="button" class="deck-x" id="deckClose" aria-label="Close deck">Close</button></div>
+    <div class="deck-img"><img id="deckImg" alt=""></div>
+    <div class="deck-bar"><button type="button" id="deckPrev" aria-label="Previous slide">Prev</button><span class="mono" id="deckNum" aria-live="polite">01 / 01</span><button type="button" id="deckNext" aria-label="Next slide">Next</button></div>
+    <div class="deck-thumbs" id="deckThumbs" role="group" aria-label="Slides"></div>
+  </div>
+</div>
+
 <script>
 (() => {
 const $ = s => document.querySelector(s);
@@ -475,6 +504,7 @@ const root = document.documentElement;
 root.classList.add("pre", "locked");
 
 const PROJECTS = [
+  { id: "pilot", title: "Pilot", kicker: "Fintech product concept, Nov 2026", blurb: "A feature for Rho that tells a first-time founder the date to start raising, built from what they have already signed.", v: "img/demo-pilot", cap: "Recorded from the live demo. Every company and number in it is synthetic." },
   { id: "stock-analyzer", title: "Portfolio Risk Analyzer", kicker: "Finance web app, Jul 2026", blurb: "A dashboard that scores portfolio risk, runs a reverse DCF, and ranks options by implied versus realized volatility.", v: "img/demo-stock", cap: "Recorded from the live app" },
   { id: "wechat", title: "WeChat Reply & React", kicker: "Product case study", blurb: "Emoji reactions, swipe to reply, and a thread view that cut the noise in busy WeChat group chats.", v: "img/demo-wechat", cap: "Walkthrough of the Figma prototype" },
   { id: "uniqlo", title: "Uniqlo Virtual Styler", kicker: "Tech consulting case", blurb: "A styling tool that lets new shoppers see a full outfit, head to toe, before they buy.", v: "img/demo-uniqlo", cap: "Walkthrough of the Figma prototype" },
@@ -482,6 +512,7 @@ const PROJECTS = [
   { id: "cs2-integrity", title: "CS2 Integrity Watch", kicker: "IBM Z Datathon, Sep 2026", blurb: "Flags pro Counter-Strike 2 matches where the betting market moved away from what the game itself said, for a person to investigate.", v: "img/demo-cs2", cap: "Real app on its sample dataset. Part of the feed is simulated." }
 ];
 const LINKS = {
+  "pilot": [{ label: "Try the demo", url: "https://adonis-umber.vercel.app/" }, { label: "Code on GitHub", url: "https://github.com/ProdRegis/RhoFinanceDemo" }],
   "stock-analyzer": [{ label: "View website", url: "https://stock-analyzer-lake-nu.vercel.app/" }, { label: "Code on GitHub", url: "https://github.com/ProdRegis/Stock-Analyzer" }],
   "wechat": [{ label: "Reply thread prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2-2&starting-point-node-id=2%3A2&scaling=scale-down" }, { label: "Reaction prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2-216&starting-point-node-id=2%3A216&scaling=scale-down" }, { label: "Group reaction prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2014-259&starting-point-node-id=2014%3A259&scaling=scale-down" }, { label: "Open in Figma", url: "https://www.figma.com/design/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=0-1" }],
   "uniqlo": [{ label: "Try the prototype", url: "https://www.figma.com/proto/RjOQTP1kzervocuJKztFLV/Uniqlo-Case-Comp?node-id=107-2&starting-point-node-id=107%3A2&scaling=scale-down" }, { label: "Open in Figma", url: "https://www.figma.com/design/RjOQTP1kzervocuJKztFLV/Uniqlo-Case-Comp?node-id=0-1" }],
@@ -489,6 +520,8 @@ const LINKS = {
   "cs2-integrity": []
 };
 const PASSWORDS = { "stock-analyzer": "cryingbrickwall-99" };
+
+const DECKS = { pilot: 16, wechat: 14, uniqlo: 14 };
 const STOPS = [
   { at: .03, yr: "2022", org: "Touch 3 Volleyball", what: "High Performance Coach", when: "2022 to 2025" },
   { at: .27, yr: "2025", org: "NYU Product Management Club", what: "BrainStation Case Competition, top three finisher", when: "2025" },
@@ -881,7 +914,7 @@ const panels = PROJECTS.map((p, i) => {
       <div class="count mono"><b></b><span>${pad2(i + 1)} / ${pad2(PROJECTS.length)}</span><span>${p.kicker}</span></div>
       <h3>${p.title}</h3>
       <p>${p.blurb}</p>
-      <div class="links">${(LINKS[p.id] || []).map((l, k) => `<a class="pill${k ? "" : " solid"}" href="${l.url}" target="_blank" rel="noopener" data-hover>${l.label}</a>`).join("")}</div>
+      <div class="links">${(LINKS[p.id] || []).map((l, k) => `<a class="pill${k ? "" : " solid"}" href="${l.url}" target="_blank" rel="noopener" data-hover>${l.label}</a>`).join("")}${DECKS[p.id] ? `<button type="button" class="pill deck-btn" data-deck="${p.id}" data-hover>View deck</button>` : ""}</div>
       ${PASSWORDS[p.id] ? `<div class="pw mono"><span>Website password</span><code>${PASSWORDS[p.id]}</code><button type="button" data-copy="${PASSWORDS[p.id]}">Copy</button></div>` : ""}
     </div>
     <div class="screen-wrap">
@@ -1025,6 +1058,39 @@ applyView(viewOf(location.hash));
   const ua = navigator.userAgentData;
   if (ua && ua.brands && ua.brands.some(b => /Chromium/.test(b.brand))) root.classList.add("liquid");
 }
+
+
+/* ================= Deck viewer ================= */
+const deckEl = $("#deck"), deckImg = $("#deckImg"), deckThumbs = $("#deckThumbs");
+let deckId = null, deckAt = 0, deckReturn = null;
+const slideSrc = (id, k) => `img/p_${id}-deck-${String(k + 1).padStart(2, "0")}.jpg`;
+function deckShow(k) {
+  const n = DECKS[deckId]; deckAt = (k + n) % n;
+  deckImg.src = slideSrc(deckId, deckAt); deckImg.alt = `Slide ${deckAt + 1} of ${n}`;
+  $("#deckNum").textContent = `${pad2(deckAt + 1)} / ${pad2(n)}`;
+  deckThumbs.querySelectorAll("button").forEach((b, i) => { b.setAttribute("aria-current", i === deckAt ? "true" : "false"); if (i === deckAt) b.scrollIntoView({ block: "nearest", inline: "nearest" }); });
+  const pre = new Image(); pre.src = slideSrc(deckId, (deckAt + 1) % n);
+}
+function deckOpen(id, from) {
+  deckId = id; deckReturn = from || null;
+  const p = PROJECTS.find(x => x.id === id);
+  $("#deckTitle").textContent = p ? p.title + ", deck" : "Deck";
+  deckThumbs.innerHTML = Array.from({ length: DECKS[id] }, (_, i) => `<button type="button" data-k="${i}" aria-label="Slide ${i + 1}"><img src="${slideSrc(id, i)}" alt="" loading="lazy"></button>`).join("");
+  deckEl.hidden = false; deckShow(0); $("#deckNext").focus({ preventScroll: true });
+}
+function deckClose() { deckEl.hidden = true; deckId = null; if (deckReturn) deckReturn.focus({ preventScroll: true }); }
+$("#deckPrev").addEventListener("click", () => deckShow(deckAt - 1));
+$("#deckNext").addEventListener("click", () => deckShow(deckAt + 1));
+$("#deckClose").addEventListener("click", deckClose);
+deckEl.addEventListener("click", e => { if (e.target === deckEl) deckClose(); });
+deckThumbs.addEventListener("click", e => { const b = e.target.closest("button[data-k]"); if (b) deckShow(+b.dataset.k); });
+addEventListener("keydown", e => {
+  if (deckEl.hidden) return;
+  if (e.key === "Escape") { e.preventDefault(); deckClose(); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); SFX.click(); deckShow(deckAt + 1); }
+  else if (e.key === "ArrowLeft") { e.preventDefault(); SFX.click(); deckShow(deckAt - 1); }
+});
+document.addEventListener("click", e => { const b = e.target.closest("[data-deck]"); if (b) deckOpen(b.dataset.deck, b); });
 
 /* ================= Frame loop ================= */
 function onFrame(now) {
