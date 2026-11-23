@@ -322,6 +322,7 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
 .deck-img{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:16px;overflow:hidden;background:#0c0f13}
 .deck-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .2s}
 .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 4px}
+.deck-acts{display:flex;gap:8px;flex:none}
 .deck-bar button,.deck-x{display:inline-grid;place-items:center;min-width:42px;height:42px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--fg);font:500 11px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;transition:background .3s,border-color .3s}
 .deck-bar button:hover,.deck-x:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35)}
 .deck-thumbs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 4px 4px}
@@ -488,7 +489,7 @@ html.liquid .wm-glass{-webkit-backdrop-filter:url(#liquid) brightness(1.55) satu
 
 <div class="deck" id="deck" role="dialog" aria-modal="true" aria-labelledby="deckTitle" hidden>
   <div class="deck-card">
-    <div class="deck-top"><b id="deckTitle">Deck</b><button type="button" class="deck-x" id="deckClose" aria-label="Close deck">Close</button></div>
+    <div class="deck-top"><b id="deckTitle">Deck</b><span class="deck-acts"><a class="deck-x" id="deckPdf" href="#" target="_blank" rel="noopener">Open PDF</a><button type="button" class="deck-x" id="deckClose" aria-label="Close deck">Close</button></span></div>
     <div class="deck-img"><img id="deckImg" alt=""></div>
     <div class="deck-bar"><button type="button" id="deckPrev" aria-label="Previous slide">Prev</button><span class="mono" id="deckNum" aria-live="polite">01 / 01</span><button type="button" id="deckNext" aria-label="Next slide">Next</button></div>
     <div class="deck-thumbs" id="deckThumbs" role="group" aria-label="Slides"></div>
@@ -512,7 +513,7 @@ const PROJECTS = [
   { id: "cs2-integrity", title: "CS2 Integrity Watch", kicker: "IBM Z Datathon, Sep 2026", blurb: "Flags pro Counter-Strike 2 matches where the betting market moved away from what the game itself said, for a person to investigate.", v: "img/demo-cs2", cap: "Real app on its sample dataset. Part of the feed is simulated." }
 ];
 const LINKS = {
-  "pilot": [{ label: "Code on GitHub", url: "https://github.com/ProdRegis/RhoFinanceDemo" }],
+  "pilot": [{ label: "Code on GitHub", url: "https://github.com/ProdRegis/Pilot" }],
   "stock-analyzer": [{ label: "View website", url: "https://stock-analyzer-lake-nu.vercel.app/" }, { label: "Code on GitHub", url: "https://github.com/ProdRegis/Stock-Analyzer" }],
   "wechat": [{ label: "Reply thread prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2-2&starting-point-node-id=2%3A2&scaling=scale-down" }, { label: "Reaction prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2-216&starting-point-node-id=2%3A216&scaling=scale-down" }, { label: "Group reaction prototype", url: "https://www.figma.com/proto/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=2014-259&starting-point-node-id=2014%3A259&scaling=scale-down" }, { label: "Open in Figma", url: "https://www.figma.com/design/0ZY3nJ0BpSvh12E8FG0SC0/WeChat-Reply-and-Reactions--Deck-and-Prototype?node-id=0-1" }],
   "uniqlo": [{ label: "Try the prototype", url: "https://www.figma.com/proto/RjOQTP1kzervocuJKztFLV/Uniqlo-Case-Comp?node-id=107-2&starting-point-node-id=107%3A2&scaling=scale-down" }, { label: "Open in Figma", url: "https://www.figma.com/design/RjOQTP1kzervocuJKztFLV/Uniqlo-Case-Comp?node-id=0-1" }],
@@ -522,6 +523,8 @@ const LINKS = {
 const PASSWORDS = { "stock-analyzer": "cryingbrickwall-99" };
 
 const DECKS = { pilot: 16, wechat: 14, uniqlo: 14, "cs2-integrity": 13 };
+const DECK_FILE = { "cs2-integrity": "cs2" };   // file prefix when it differs from the project id
+const deckKey = id => DECK_FILE[id] || id;
 const STOPS = [
   { at: .03, yr: "2022", org: "Touch 3 Volleyball", what: "High Performance Coach", when: "2022 to 2025" },
   { at: .27, yr: "2025", org: "NYU Product Management Club", what: "BrainStation Case Competition, top three finisher", when: "2025" },
@@ -1063,7 +1066,7 @@ applyView(viewOf(location.hash));
 /* ================= Deck viewer ================= */
 const deckEl = $("#deck"), deckImg = $("#deckImg"), deckThumbs = $("#deckThumbs");
 let deckId = null, deckAt = 0, deckReturn = null;
-const slideSrc = (id, k) => `img/p_${id}-deck-${String(k + 1).padStart(2, "0")}.jpg`;
+const slideSrc = (id, k) => `img/p_${deckKey(id)}-deck-${String(k + 1).padStart(2, "0")}.jpg`;
 function deckShow(k) {
   const n = DECKS[deckId]; deckAt = (k + n) % n;
   deckImg.src = slideSrc(deckId, deckAt); deckImg.alt = `Slide ${deckAt + 1} of ${n}`;
@@ -1075,6 +1078,7 @@ function deckOpen(id, from) {
   deckId = id; deckReturn = from || null;
   const p = PROJECTS.find(x => x.id === id);
   $("#deckTitle").textContent = p ? p.title + ", deck" : "Deck";
+  $("#deckPdf").href = `img/${deckKey(id)}-deck.pdf`;
   deckThumbs.innerHTML = Array.from({ length: DECKS[id] }, (_, i) => `<button type="button" data-k="${i}" aria-label="Slide ${i + 1}"><img src="${slideSrc(id, i)}" alt="" loading="lazy"></button>`).join("");
   deckEl.hidden = false; deckShow(0); $("#deckNext").focus({ preventScroll: true });
 }
